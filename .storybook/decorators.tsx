@@ -1,14 +1,21 @@
 import {Wallet} from "ethers";
 import {chain, configureChains, createClient, WagmiConfig} from "wagmi";
 import {MockConnector} from "@wagmi/core/connectors/mock";
-import {publicProvider} from "wagmi/providers/public";
+import {jsonRpcProvider} from "wagmi/providers/jsonRpc";
 import {Story} from "@storybook/react";
 import {wagmiClient} from "../pages/_app";
 
 
 const {chains, provider, webSocketProvider} = configureChains(
     [chain.hardhat],
-    [publicProvider()],
+    [
+        jsonRpcProvider({
+            rpc: () => ({
+                http: "http://localhost:8545",
+                webSocket: "ws://localhost:8545"
+            }),
+        }),
+    ],
 )
 
 export const WagmiDecorator = (Story: Story) => {
